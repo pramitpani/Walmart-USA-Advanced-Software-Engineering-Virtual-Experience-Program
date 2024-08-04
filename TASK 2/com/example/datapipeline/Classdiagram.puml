@@ -1,0 +1,44 @@
+@startuml
+interface Processor {
+    + configure(mode: ModeIdentifier, db: DatabaseIdentifier): void
+    + process(data: DataPoint): void
+}
+
+abstract class AbstractProcessor {
+    - mode: ModeIdentifier
+    - database: DatabaseIdentifier
+    + configure(mode: ModeIdentifier, db: DatabaseIdentifier): void
+    + process(data: DataPoint): void
+}
+
+class DumpProcessor {
+    + process(data: DataPoint): void
+}
+
+class PassthroughProcessor {
+    + process(data: DataPoint): void
+}
+
+class ValidateProcessor {
+    + process(data: DataPoint): void
+}
+
+Processor <|.. AbstractProcessor
+AbstractProcessor <|-- DumpProcessor
+AbstractProcessor <|-- PassthroughProcessor
+AbstractProcessor <|-- ValidateProcessor
+
+interface DatabaseConnector {
+    + connect(): void
+    + insert(data: DataPoint): void
+    + validate(data: DataPoint): boolean
+}
+
+class PostgresConnector
+class RedisConnector
+class ElasticConnector
+
+DatabaseConnector <|.. PostgresConnector
+DatabaseConnector <|.. RedisConnector
+DatabaseConnector <|.. ElasticConnector
+@enduml
